@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
     "host": "node ./bin/server.js",
-    "debug": "nodemon --watch src --exec 'npm run build'",
+    "debug": "nodemon --watch src/index.js --exec 'npm run build'",
     "debug2": "nodemon --watch ../UD-Viz/packages/widget_sparql/src --watch ./src -e js --delay 2500ms --exec npm run build"
   },
   "keywords": [],
@@ -32,4 +32,3 @@
     "cross-env": "^7.0.3"
   }
 }
- 
