@@ -1,0 +1,7 @@
+  UNION {
+    ?subject ?predicate ?object ;
+      a ?subjectType .
+  
+    OPTIONAL { ?object a ?objectType }
+    FILTER (?subject = data:nodeName)
+  }

@@ -4,9 +4,9 @@ import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal
 import {
   loadMultipleJSON,
   initScene,
-  getUriLocalname,
 } from "@ud-viz/utils_browser";
 import * as widgetSPARQL from '@ud-viz/widget_sparql';
+
 
 loadMultipleJSON([
     './assets/config/extents.json',
@@ -75,7 +75,7 @@ loadMultipleJSON([
       itowns.View.prototype.addLayer.call(view, c3DTilesLayer);
     });
 
-    // //// SPARQL MODULE
+     // //// SPARQL MODULE
     const sparqlWidget = new widgetSPARQL.SparqlQueryWindow(
       new widgetSPARQL.SparqlEndpointResponseProvider(
         configs['sparql_server']
@@ -89,11 +89,67 @@ loadMultipleJSON([
     uiDomElement.classList.add('full_screen');
     document.body.appendChild(uiDomElement);
     uiDomElement.appendChild(sparqlWidget.domElement);
-
+   
     // Add listeners for D3Canvas node events. Three events are currently recognized 'click', 'mouseover', and 'mouseout'
+    sparqlWidget.d3Graph.addEventListener('click', (event) => {
+
+      const node = event.datum;
+      console.log('node clicked: ', node);
+
+      sparqlWidget.menu.style.left = `${event.event.pageX}px`;
+      sparqlWidget.menu.style.top = `${event.event.pageY}px`;
+
+      sparqlWidget.menu.style.display = 'block';
+
+      if (node.child != undefined) {
+        sparqlWidget.optionCluster.onclick = () => {
+          sparqlWidget.d3Graph.changeVisibilityChildren(node.id);
+          sparqlWidget.menu.style.display = 'none';
+          if (!node.realNode){
+            sparqlWidget.d3Graph.removeNode(node.id);
+          }
+          sparqlWidget.d3Graph.update();
+        };
+        sparqlWidget.optionCluster.style.display = 'block';
+        if (node.cluster) {
+          sparqlWidget.optionCluster.innerText = 'Afficher ses descendants';
+        } else {
+          sparqlWidget.optionCluster.innerText = 'Cacher ses descendants';
+          if (node.realNode) {
+            const childrenType = sparqlWidget.d3Graph.getChildrenType(node.id);
+            if (childrenType.length) {
+              sparqlWidget.menuList.insertBefore(sparqlWidget.optionsType,sparqlWidget.optionAnnuler);
+              while (sparqlWidget.optionsType.hasChildNodes()) {
+                sparqlWidget.optionsType.removeChild(sparqlWidget.optionsType.firstChild);
+              }
+              for (const type of childrenType) {
+                const option = document.createElement('li');
+                option.innerText = 'Cacher ses enfants de type ' + type;
+                option.onclick = () => {
+                  const childrenList = sparqlWidget.d3Graph.getChildrenByType(node.id,type);
+                  sparqlWidget.d3Graph.createNewCluster('cluster_' + type, childrenList, node.id);
+                  sparqlWidget.menuList.removeChild(sparqlWidget.optionsType);
+                  sparqlWidget.menu.style.display = 'none';
+                };
+                sparqlWidget.optionsType.appendChild(option);
+              }
+            }
+          }
+        }
+      }
+      else if (sparqlWidget.querySelect.value == 0) {
+        sparqlWidget.optionAddChildren.onclick = () => {
+          sparqlWidget.updateExplorationQuery(node.id);
+          sparqlWidget.menu.style.display = 'none';
+          sparqlWidget.optionAddChildren.style.display = 'none';
+        };
+        sparqlWidget.optionAddChildren.style.display = 'block';
+        sparqlWidget.optionCluster.style.display = 'none'; // pas vraiment ici
+      } 
+    });
 
     // graph event
-    sparqlWidget.d3Graph.addEventListener('click', (event) => {
+    /*sparqlWidget.d3Graph.addEventListener('click', (event) => {
       // Get clicked node's data, if nodeData.type is 'Building', zoom camera on a feature with the same 'gmlid' as nodeData.id
       const nodeData = sparqlWidget.d3Graph.data.getNodeByIndex(
         event.datum.index
@@ -121,10 +177,10 @@ loadMultipleJSON([
           }
         );
       }
-    });
+    });*/
 
     // graph event
-    sparqlWidget.table.addEventListener('click', (event) => {
+    /*sparqlWidget.table.addEventListener('click', (event) => {
       const col = event.datum.col;
       const row = event.datum.row;
       const clickedResult = fetchC3DTileFeatureWithNodeText(
@@ -148,5 +204,5 @@ loadMultipleJSON([
           horizontalDistance: 200,
         }
       );
-    });
+    });*/
   });

@@ -1,6 +1,6 @@
 {
   "height": 500,
-  "width": 500,
+  "width": 800,
   "fontSize": 4,
   "queries": [
     {
@@ -9,7 +9,15 @@
         "graph": "Graph",
         "json": "JSON"
       },
-      "filepath": "./assets/queries/test.rq"
+      "filepath": "./assets/queries/building.rq"
+    },
+    {
+      "title": "Requête construct",
+      "formats": {
+        "graph": "Graph",
+        "json": "JSON"
+      },
+      "filepath": "./assets/queries/construct.rq"
     },
     {
       "title": "Select a CityGML Building with ID: 'VILLEURBANNE_00012_23'",
@@ -80,6 +88,10 @@
     "https://raw.githubusercontent.com/VCityTeam/UD-Graph/master/Ontologies/CityGML/2.0/vegetation#": "veg",
     "https://raw.githubusercontent.com/VCityTeam/UD-Graph/master/Ontologies/CityGML/2.0/waterbody#": "wtr",
     "https://raw.githubusercontent.com/VCityTeam/UD-Graph/master/Ontologies/CityGML/3.0/versioning#": "vers",
-    "https://raw.githubusercontent.com/VCityTeam/UD-Graph/master/Ontologies/Workspace/3.0/transactiontypes#": "type"
+    "https://raw.githubusercontent.com/VCityTeam/UD-Graph/master/Ontologies/Workspace/3.0/transactiontypes#": "type",
+    "https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Ontologies/CityGML/3.0/building#": "bldg",
+    "https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Ontologies/CityGML/3.0/construction#": "con",
+    "http://def.isotc211.org/iso19107/2003/CoordinateGeometry#": "iso19107-cm",
+    "http://www.w3.org/2006/time#": "time"
   }
 }

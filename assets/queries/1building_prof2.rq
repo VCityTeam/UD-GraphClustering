@@ -1,0 +1,26 @@
+PREFIX bldg: <https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Ontologies/CityGML/3.0/building#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX data: <https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Datasets/GratteCiel_Workspace_2009_2018/3.0/GratteCiel_2018_split#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX core: <https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Ontologies/CityGML/3.0/core#>
+PREFIX iso19136: <http://def.isotc211.org/iso19136/2007/Feature#>
+
+SELECT ?subject ?subjectType ?predicate ?object ?objectType
+WHERE {
+  {
+    ?subject ?predicate ?object ;
+      a ?subjectType ;
+      skos:prefLabel "69266BC115" .
+  
+    OPTIONAL { ?object a ?objectType }
+  } 
+  UNION {
+    data:69266BC115 core:AbstractSpace.boundary|iso19136:AbstractFeature.boundedBy ?subject . #rajoute une profondeur mais que pour les AbstractSpace.boundary et AbstractFeature.boundedBy
+    ?subject ?predicate ?object ;
+      a ?subjectType .
+  
+    OPTIONAL { ?object a ?objectType} 
+    }
+  FILTER(?subjectType != owl:NamedIndividual)
+  FILTER(!bound(?objectType) || ?objectType != owl:NamedIndividual)
+}
