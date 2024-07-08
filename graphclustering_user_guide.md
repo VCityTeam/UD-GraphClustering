@@ -16,7 +16,7 @@ Use this dropdown menu to select how the query result will be visualized. Curren
 ### Interactions with the Graph
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
 
-
+![context-menu-demo](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/f757500e-33e0-4c6c-97a5-98a61cb68e27)
 
 | Action title                          | Description                                                                                                                             | Apply to                                               |
 | ------------------------------------- |:--------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
