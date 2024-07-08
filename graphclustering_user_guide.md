@@ -16,7 +16,7 @@ Use this dropdown menu to select how the query result will be visualized. Curren
 ### Interactions with the Graph
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
 
-![image](images/context-menu.mp4)
+
 
 | Action title                          | Description                                                                                                                             | Apply to                                               |
 | ------------------------------------- |:--------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
@@ -28,13 +28,4 @@ Clicking on any node will display, in a context menu, all the possible actions r
 
 Clicking on a created cluster node removes the node from the graph and makes the children reappear.
 
-
-Not every query provides enough data to the Workspace or Graph visualizations, for these functionalities to work. Thus some queries only serve as a visual representation of the data. Here is a list of which queries support the funcionalities described above :
-
-| Query                                | Workspace Support (display corresponding Version or Transition) | Graph Support (zoom on building) |
-| ------------------------------------ | --------------------------------------------------------------- | -------------------------------- |
-| Show Full Workspace                  | 🟢                                                              | 🔴                                |
-| Show Versions and VersionTransitions | 🔴                                                              | 🔴                                |
-| Show Scenario 1                      | 🔴                                                               | 🔴                                |
-| Show Scenario 2                      | 🔴                                                               | 🔴                                |
-| Show Transition 2009-2012            | 🟢                                                               | 🟢                                |
+The action "Add its children" is not available with all query but only the original one, that is called the "exploration query".
