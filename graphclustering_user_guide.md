@@ -16,6 +16,8 @@ Use this dropdown menu to select how the query result will be visualized. Curren
 ### Interactions with the Graph
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
 
+![image](images/context-menu.mp4)
+
 | Action title                          | Description                                                                                                                             | Apply to                                               |
 | ------------------------------------- |:--------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | Hide the descendants                  | Transforms the node into a cluster in which all its descendants are hidden                                                              | Nodes with children                                    |
@@ -25,8 +27,6 @@ Clicking on any node will display, in a context menu, all the possible actions r
 | Hide the children with the type '...' | Creates a new cluster node linked to the clicked node in which all its children with the specified type and their descendant are hidden | Nodes whose children have more than one different type | 
 
 Clicking on a created cluster node removes the node from the graph and makes the children reappear.
-
-![image](url)
 
 
 Not every query provides enough data to the Workspace or Graph visualizations, for these functionalities to work. Thus some queries only serve as a visual representation of the data. Here is a list of which queries support the funcionalities described above :
