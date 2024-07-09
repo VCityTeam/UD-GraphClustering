@@ -1,7 +1,7 @@
 # Graph Clustering User Guide
-This is a user guide for using the Graph Clustering functionalities as a part of the SparqlQueryWidget. This is a UD-Viz Widget for visualizing urban graph data and interacting with objects in the 3D scene.
+This is a user guide for using the Graph Clustering functionalities as a part of the SPARQL module [here](packages/widget_sparql/Readme.md). This is a UD-Viz widget for visualizing urban graph data and interacting with objects in the 3D scene.
 
-The Widget is displayed on the top left corner of the screen.
+The widget is displayed on the top left corner of the screen.
 
 ## Interface
 
@@ -14,8 +14,9 @@ Queries are written in [SPARQL](https://www.w3.org/TR/sparql11-query/)
 
 ### Select Result Visualization Format
 Use this dropdown menu to select how the query result will be visualized. Currently 2 modes are presented that enable different functionalities to interact with the 3D scene:
--JSON
--Graph
+
+- JSON
+- Graph
 
 ## Graph view
 #### Graph configuration
@@ -27,6 +28,12 @@ Use the "Graph configuration" menu to enable or disable zoom clustering. This fu
 ![zoom-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/02cd51a7-e6a7-408e-9f78-1d2c007a6216)
 
 You can also modify the forces exerted on and between nodes, as well as the length of the links connecting them.
+
+The "Building ID" input lets you find and focus the camera on any building in the 3D scene, by knowing its ID.
+
+*Show button*
+
+![show-building](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/b5a9a84b-4f8d-4ae9-9f77-b9df1618f305)
 
 #### Interactions with the Graph
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
