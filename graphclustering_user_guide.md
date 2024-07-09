@@ -43,8 +43,14 @@ Clicking on any node will display, in a context menu, all the possible actions r
 
 *Hide/Show the descendants*
 
-![clic-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/307b3878-31d3-49ee-b98a-144965b089c2)
+![click-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/307b3878-31d3-49ee-b98a-144965b089c2)
 
 Clicking on a created cluster node removes the node from the graph and makes the children reappear.
 
 The action "Add its children" is not available with all query but only the original one, that is called the "exploration query".
+
+#### Interactions with the 3D scene
+Clicking on a building of the 3D scene will add the corresponding node and its children to the graph. This functionality is made possible by the URIs of nodes in the graph that corresponds with identifiers of objects in the tileset's batch table.
+
+![click-building](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/a6069e8d-5369-49dc-bcf9-84f900784346)
+
