@@ -5,6 +5,8 @@ The Widget is displayed on the top left corner of the screen.
 
 ## Interface
 
+![interface](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/5b654576-b910-4b28-83ae-1397462bd0f7)
+
 ### Show/Hide Query
 This button can toggle whether the text area for the query to be submitted is shown or not. This also allows the query to be edited before submission.
 
@@ -12,11 +14,18 @@ Queries are written in [SPARQL](https://www.w3.org/TR/sparql11-query/)
 
 ### Select Result Visualization Format
 Use this dropdown menu to select how the query result will be visualized. Currently 2 modes are presented that enable different functionalities to interact with the 3D scene:
+-JSON
+-Graph
 
-### Interactions with the Graph
+## Graph view
+#### Graph configuration
+
+Use the "Graph configuration" menu to modify the sensitivity of the zoom. This is a useful feature, as a clustering by zoom is implemented in the demo. Increasing sensitivity speeds up node masking when zoomed into the graph, and their display when dezoomed. You can also modify the forces exerted on and between nodes, as well as the length of the links connecting them.
+
+#### Interactions with the Graph
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
 
-![context-menu-demo](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/f757500e-33e0-4c6c-97a5-98a61cb68e27)
+![chrome-capture-2024-7-9](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/ed13b653-32aa-4801-b82f-d39ac90b5d32)
 
 | Action title                          | Description                                                                                                                             | Apply to                                               |
 | ------------------------------------- |:--------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
