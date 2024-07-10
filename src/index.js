@@ -1,9 +1,13 @@
 import * as proj4 from 'proj4';
 import * as itowns from 'itowns';
+import * as THREE from 'three';
 import * as extensions3DTilesTemporal from '@ud-viz/extensions_3d_tiles_temporal';
 import {
   loadMultipleJSON,
   initScene,
+  getUriLocalname,
+  fetchC3DTileFeatureWithNodeText,
+  focusCameraOn
 } from "@ud-viz/utils_browser";
 import * as widgetSPARQL from '@ud-viz/widget_sparql';
 
@@ -40,15 +44,23 @@ loadMultipleJSON([
       loadingScreen(view, ['UD-VIZ', 'UDVIZ_VERSION']);
 
     // init scene 3D
-    
     initScene(
       view.camera.camera3D,
       view.mainLoop.gfxEngine.renderer,
       view.scene
     );
 
-    // add a 3DTiles temporal layer
+    const style = new itowns.Style({
+      fill: {
+        color: function (feature) {
+          return feature.userData.selectedColor
+            ? feature.userData.selectedColor
+            : 'white';
+        },
+      },
+    });
 
+    // add a 3DTiles temporal layer
     const extensions = new itowns.C3DTExtensions();
     extensions.registerExtension(extensions3DTilesTemporal.ID, {
       [itowns.C3DTilesTypes.batchtable]:
@@ -63,6 +75,7 @@ loadMultipleJSON([
       const c3DTilesLayer = new itowns.C3DTilesLayer(
         layerConfig.id,
         {
+          style: style,
           name: layerConfig.id,
           source: new itowns.C3DTilesSource({
             url: layerConfig.url,
@@ -89,120 +102,201 @@ loadMultipleJSON([
     uiDomElement.classList.add('full_screen');
     document.body.appendChild(uiDomElement);
     uiDomElement.appendChild(sparqlWidget.domElement);
+
+    // hide the context menu
+    window.onclick = () => { 
+      sparqlWidget.menu.style.display = 'none';
+     };
+
+    // store the children who have already been hidden
+    var hiddenChildren = new Map();
    
-    // Add listeners for D3Canvas node events. Three events are currently recognized 'click', 'mouseover', and 'mouseout'
+    // add listeners for D3Canvas node events. Three events are currently recognized 'click', 'mouseover', and 'mouseout'
     sparqlWidget.d3Graph.addEventListener('click', (event) => {
+
+      event.event.stopPropagation();
 
       const node = event.datum;
       console.log('node clicked: ', node);
 
-      sparqlWidget.menu.style.left = `${event.event.pageX}px`;
-      sparqlWidget.menu.style.top = `${event.event.pageY}px`;
+      if (node.display) {
+        // display the context menu with a list of all possible actions for the clicked node
+        sparqlWidget.menu.style.left = `${event.event.pageX}px`;
+        sparqlWidget.menu.style.top = `${event.event.pageY}px`;
+        sparqlWidget.menu.style.display = 'block';
 
-      sparqlWidget.menu.style.display = 'block';
+        // reset the list of options 
+        while (sparqlWidget.optionsType.hasChildNodes()) {
+          sparqlWidget.optionsType.removeChild(sparqlWidget.optionsType.firstChild);
+        }
 
-      if (node.child != undefined) {
-        sparqlWidget.optionCluster.onclick = () => {
-          sparqlWidget.d3Graph.changeVisibilityChildren(node.id);
-          sparqlWidget.menu.style.display = 'none';
-          if (!node.realNode){
-            sparqlWidget.d3Graph.removeNode(node.id);
-          }
-          sparqlWidget.d3Graph.update();
-        };
-        sparqlWidget.optionCluster.style.display = 'block';
-        if (node.cluster) {
-          sparqlWidget.optionCluster.innerText = 'Afficher ses descendants';
-        } else {
-          sparqlWidget.optionCluster.innerText = 'Cacher ses descendants';
-          if (node.realNode) {
-            const childrenType = sparqlWidget.d3Graph.getChildrenType(node.id);
-            if (childrenType.length) {
-              sparqlWidget.menuList.insertBefore(sparqlWidget.optionsType,sparqlWidget.optionAnnuler);
-              while (sparqlWidget.optionsType.hasChildNodes()) {
-                sparqlWidget.optionsType.removeChild(sparqlWidget.optionsType.firstChild);
-              }
-              for (const type of childrenType) {
-                const option = document.createElement('li');
-                option.innerText = 'Cacher ses enfants de type ' + type;
-                option.onclick = () => {
-                  const childrenList = sparqlWidget.d3Graph.getChildrenByType(node.id,type);
-                  sparqlWidget.d3Graph.createNewCluster('cluster_' + type, childrenList, node.id);
-                  sparqlWidget.menuList.removeChild(sparqlWidget.optionsType);
-                  sparqlWidget.menu.style.display = 'none';
-                };
-                sparqlWidget.optionsType.appendChild(option);
+        if (node.child != undefined) {
+          // add the option to show/hide the descendants of the node
+          sparqlWidget.optionAddChildren.style.display = 'none';
+          sparqlWidget.optionCluster.style.display = 'block';
+          sparqlWidget.optionCluster.onclick = () => {
+            sparqlWidget.d3Graph.changeVisibilityChildren(node.id);
+            if (!node.realNode) {
+              // if the node is a created cluster, it is removed when you click on it
+              sparqlWidget.d3Graph.removeNode(node.id);
+              hiddenChildren.set(node.parent[0],hiddenChildren.get(node.parent[0]).filter((d) => d != node.id));
+            }
+            sparqlWidget.d3Graph.update();
+            sparqlWidget.optionCluster.style.display = 'none';
+          };
+          if (node.cluster) {
+            sparqlWidget.optionCluster.innerText = 'Show the descendants';
+          } else {
+            sparqlWidget.optionCluster.innerText = 'Hide the descendants';
+            if (node.realNode) {
+              // add the options to create a new cluster that hides all children of a node with a specific type
+              const childrenType = sparqlWidget.d3Graph.getChildrenType(node.id);
+              if (childrenType.length > 1) {
+                sparqlWidget.menuList.appendChild(sparqlWidget.optionsType);
+                if (!hiddenChildren.has(node.id)) hiddenChildren.set(node.id,[]);
+                for (const type of childrenType) {
+                  if (!hiddenChildren.get(node.id).includes(type)) {
+                    const option = document.createElement('li');
+                    option.innerText = 'Hide the children with type ' + type;
+                    option.onclick = () => {
+                      hiddenChildren.get(node.id).push(type);
+                      const childrenList = sparqlWidget.d3Graph.getChildrenByType(node.id,type);
+                      sparqlWidget.d3Graph.createNewCluster(type, childrenList, node.id);
+                      sparqlWidget.d3Graph.update();
+                      sparqlWidget.menuList.removeChild(sparqlWidget.optionsType);
+                    };
+                    sparqlWidget.optionsType.appendChild(option);
+                  }
+                }
               }
             }
           }
+        } else {
+          // only works with the exploration query
+          sparqlWidget.optionCluster.style.display = 'none';
+          sparqlWidget.optionAddChildren.style.display = 'block';
+          sparqlWidget.optionAddChildren.onclick = () => {
+            sparqlWidget.updateExplorationQuery(getUriLocalname(node.id));
+            sparqlWidget.optionAddChildren.style.display = 'none';
+          };
+        }
+
+        if (node.type == 'Building') {
+          // add the option to focus the camera on the matching 3D building
+          sparqlWidget.optionCamera.style.display = 'block';
+          sparqlWidget.optionCamera.onclick = () => {
+            const clickedResult = fetchC3DTileFeatureWithNodeText(
+              view,
+              'gml_id',
+              getUriLocalname(node.id)
+            );
+            if (!clickedResult) return;
+    
+            console.log(clickedResult.feature.getInfo());
+    
+            focusCameraOn(
+              view,
+              view.controls,
+              clickedResult.feature
+                .computeWorldBox3(undefined)
+                .getCenter(new THREE.Vector3()),
+              {
+                verticalDistance: 200,
+                horizontalDistance: 200,
+              }
+            );
+          };
+        } else {
+          sparqlWidget.optionCamera.style.display = 'none';
         }
       }
-      else if (sparqlWidget.querySelect.value == 0) {
-        sparqlWidget.optionAddChildren.onclick = () => {
-          sparqlWidget.updateExplorationQuery(node.id);
-          sparqlWidget.menu.style.display = 'none';
-          sparqlWidget.optionAddChildren.style.display = 'none';
-        };
-        sparqlWidget.optionAddChildren.style.display = 'block';
-        sparqlWidget.optionCluster.style.display = 'none'; // pas vraiment ici
-      } 
     });
 
-    // graph event
-    /*sparqlWidget.d3Graph.addEventListener('click', (event) => {
-      // Get clicked node's data, if nodeData.type is 'Building', zoom camera on a feature with the same 'gmlid' as nodeData.id
-      const nodeData = sparqlWidget.d3Graph.data.getNodeByIndex(
-        event.datum.index
+    const contextSelection = {
+      feature: [],
+      layer: [],
+    };
+
+    sparqlWidget.resetButton.onclick = () => {
+      // add on click behavior of the 'Clear Graph' button :reset the graph and the 3D view
+      sparqlWidget.d3Graph.clearCanvas();
+      sparqlWidget.d3Graph.data.clear();
+      sparqlWidget.explorationQuery.where_conditions = [];
+      if (sparqlWidget.queries.length > 1) sparqlWidget.updateQueryTextArea(sparqlWidget.querySelect.value);
+      else sparqlWidget.queryTextArea.value = sparqlWidget.explorationQuery.generateQuery();
+      if (contextSelection.feature.length) {
+        // reset feature userData
+        for (let i = 0 ; i < contextSelection.feature.length ; i++){
+          contextSelection.feature[i].userData.selectedColor = null;
+          contextSelection.layer[i].updateStyle();
+        }
+        contextSelection.feature = [];
+        contextSelection.layer = [];
+      }
+      view.notifyChange();
+    };
+
+    view.domElement.onclick = (event) => {
+
+      // get intersects based on the click event
+      const intersects = view.pickObjectsAt(
+        event,
+        0,
+        view.getLayers().filter((el) => el.isC3DTilesLayer)
       );
 
-      console.debug('node clicked: ', nodeData);
+      if (intersects.length) {
+        // get featureClicked
+        const featureClicked =
+          intersects[0].layer.getC3DTileFeatureFromIntersectsArray(
+            intersects
+          );
+        if (featureClicked) {
+          // update the graph with the node of the clicked building
+          const batchTable = featureClicked.getInfo().batchTable;
+          const node_id = batchTable.gml_id;
+          sparqlWidget.updateExplorationQuery(node_id);
+          
+          // write in userData the selectedColor
+          featureClicked.userData.selectedColor = 'red';
 
-      if (getUriLocalname(nodeData.type) == 'Building') {
-        const clickedResult = fetchC3DTileFeatureWithNodeText(
-          view,
-          'gml_id',
-          getUriLocalname(nodeData.id)
-        );
-        if (!clickedResult) return;
+          // and update its style layer
+          console.log(intersects[0].layer.updateStyle());
 
-        focusCameraOn(
-          view,
-          view.controls,
-          clickedResult.layer
-            .computeWorldBox3(clickedResult.feature)
-            .getCenter(new THREE.Vector3()),
-          {
-            verticalDistance: 200,
-            horizontalDistance: 200,
-          }
-        );
+          // set contextSelection
+          contextSelection.feature.push(featureClicked);
+          contextSelection.layer.push(intersects[0].layer);
+        }
       }
-    });*/
 
-    // graph event
-    /*sparqlWidget.table.addEventListener('click', (event) => {
-      const col = event.datum.col;
-      const row = event.datum.row;
+      view.notifyChange(); // need a redraw of the view
+    };
+
+    sparqlWidget.showBuildingButton.onclick = () => {
+      // add on click behavior of the 'Show' button: focus the camera of the building matching the ID written in the input
+      const node_id = sparqlWidget.buildingIdInput.value;
       const clickedResult = fetchC3DTileFeatureWithNodeText(
         view,
         'gml_id',
-        getUriLocalname(row[col].value)
+        node_id
       );
-      if (!clickedResult) return;
+      if (!clickedResult) {
+        alert('No building with this ID !')
+        return;
+      }
 
-      console.debug('clicked cell value: ', row[col].value);
+      console.log(clickedResult.feature.getInfo());
 
       focusCameraOn(
         view,
         view.controls,
-        clickedResult.layer
-        
-          .computeWorldBox3(clickedResult.feature)
+        clickedResult.feature
+          .computeWorldBox3(undefined)
           .getCenter(new THREE.Vector3()),
         {
           verticalDistance: 200,
           horizontalDistance: 200,
         }
       );
-    });*/
+    };
   });

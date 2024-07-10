@@ -1,61 +1,15 @@
 {
-  "height": 500,
-  "width": 800,
+  "height": 800,
+  "width": 1000,
   "fontSize": 4,
   "queries": [
     {
-      "title": "Requête Manon",
+      "title": "Requête exploration",
       "formats": {
         "graph": "Graph",
         "json": "JSON"
       },
       "filepath": "./assets/queries/building.rq"
-    },
-    {
-      "title": "Requête construct",
-      "formats": {
-        "graph": "Graph",
-        "json": "JSON"
-      },
-      "filepath": "./assets/queries/construct.rq"
-    },
-    {
-      "title": "Select a CityGML Building with ID: 'VILLEURBANNE_00012_23'",
-      "formats": {
-        "graph": "Graph",
-        "json": "JSON"
-      },
-      "filepath": "./assets/queries/buildingByIDQuery.rq"
-    },
-    {
-      "title": "Select an IFC Slab with ID: '2Q4QvRyEvCrefpeva98EMR'",
-      "formats": {
-        "graph": "Graph"
-      },
-      "filepath": "./assets/queries/ifcSlabByIDQuery.rq"
-    },
-    {
-      "title": "Count how many IFC Slabs are in the graph",
-      "formats": {
-        "table": "Table"
-      },
-      "filepath": "./assets/queries/ifcSlabCountQuery.rq"
-    },
-    {
-      "title": "Select all IFC Slabs in the graph",
-      "formats": {
-        "graph": "Graph"
-      },
-      "filepath": "./assets/queries/ifcSlabQuery.rq"
-    },
-    {
-      "title": "Select several random features within the 2012 version of the city model",
-      "formats": {
-        "graph": "Graph",
-        "table": "Table",
-        "json": "JSON"
-      },
-      "filepath": "./assets/queries/version.rq"
     }
   ],
   "namespaceLabels": {
