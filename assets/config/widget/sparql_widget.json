@@ -1,6 +1,6 @@
 {
-  "height": 800,
-  "width": 1000,
+  "height": 500,
+  "width": 800,
   "fontSize": 4,
   "queries": [
     {
@@ -9,7 +9,34 @@
         "graph": "Graph",
         "json": "JSON"
       },
-      "filepath": "./assets/queries/building.rq"
+      "exploration": {
+        "prefix": [
+          ["bldg", "https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Ontologies/CityGML/2.0/building#"],
+          ["skos", "http://www.w3.org/2004/02/skos/core#"],
+          ["data", "https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Datasets/Villeurbanne/2018/GratteCiel_2018_split#"]
+        ],
+        "select_variable": [
+          "subject",
+          "subjectType",
+          "predicate",
+          "object",
+          "objectType"
+        ],
+        "options": [
+          ["FILTER", "?subjectType != owl:NamedIndividual"],
+          ["FILTER", "!bound(?objectType) || ?objectType != owl:NamedIndividual"],
+          ["FILTER", "?subject != owl:NamedIndividual"],
+          ["FILTER", "?object != owl:NamedIndividual"]
+        ]
+      }
+    },
+    {
+      "title": "Requête construct",
+      "formats": {
+        "graph": "Graph",
+        "json": "JSON"
+      },
+      "filepath": "./assets/queries/construct.rq"
     }
   ],
   "namespaceLabels": {
