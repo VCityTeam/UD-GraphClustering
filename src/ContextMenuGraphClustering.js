@@ -32,9 +32,23 @@ export class ContextMenuGraphClustering {
       this.hide();
     };
 
-    this.hiddenChildren = new Map();
-    this.initOptionClusterDescendants();
+    this.initOptionClusterChildren();
     this.initOptionClusterChildrenByType();
+    this.initOptionClusterDescendants();
+  }
+
+  /**
+   * Initialize the clustering by children
+   *
+   */
+  initOptionClusterChildren() {
+    const optionElement = document.createElement('li');
+    optionElement.onclick = () => {
+      this.d3Graph.changeVisibilityChildren(this.node.id);
+      this.d3Graph.update();
+    };
+    this.menuList.appendChild(optionElement);
+    this.optionsMap.set('clusterChildren', optionElement);
   }
 
   /**
@@ -44,16 +58,11 @@ export class ContextMenuGraphClustering {
   initOptionClusterDescendants() {
     const optionElement = document.createElement('li');
     optionElement.onclick = () => {
-      this.d3Graph.changeVisibilityChildren(this.node.id);
-      if (!this.node.realNode) {
-        // if the node is a created cluster, it is removed when you click on it
-        this.d3Graph.removeNode(this.node.id);
-        this.hiddenChildren.set(this.node.parent[0],this.hiddenChildren.get(this.node.parent[0]).filter((d) => d != this.node.id));
-      }
+      this.d3Graph.changeVisibilityDescendants(this.node.id);
       this.d3Graph.update();
     };
     this.menuList.appendChild(optionElement);
-    this.optionsMap.set('cluster', optionElement);
+    this.optionsMap.set('clusterDescendants', optionElement);
   }
 
   /**
@@ -132,31 +141,37 @@ export class ContextMenuGraphClustering {
     this.menu.style.display = 'block';
 
     if (node.child != undefined) {
-      const optionCluster = this.optionsMap.get('cluster');
-      optionCluster.style.display = 'block';
-      if (node.cluster) {
-        optionCluster.innerText = 'Show the descendants';
+      const map = new Map();
+      if (this.d3Graph.possessCycle(node.id, map)) {
+        const optionClusterChildren = this.optionsMap.get('clusterChildren');
+        optionClusterChildren.style.display = 'block';
+        if (node.cluster && node.realNode) {
+          optionClusterChildren.innerText = 'Show the children';
+        } else {
+          optionClusterChildren.innerText = 'Hide the children';
+        }
       } else {
-        optionCluster.innerText = 'Hide the descendants';
+        const optionClusterDescendants = this.optionsMap.get('clusterDescendants');
+        optionClusterDescendants.style.display = "block"
+        if (node.cluster) {
+          optionClusterDescendants.innerText = 'Show the descendants';
+        } else {
+          optionClusterDescendants.innerText = 'Hide the descendants';
+        }
       }
-
       const childrenType = this.d3Graph.getChildrenType(this.node.id);
       if (childrenType.length > 1) {
         const optionsClusterByType = this.optionsMap.get('typeContainer');
         optionsClusterByType.style.display = 'block';
-        if (!this.hiddenChildren.has(node.id)) this.hiddenChildren.set(this.node.id,[]);
         for (const type of childrenType) {
-          if (!this.hiddenChildren.get(this.node.id).includes(type)) {
-            const option = document.createElement('li');
-            option.innerText = 'Hide the children with type ' + type;
-            option.onclick = () => {
-              this.hiddenChildren.get(node.id).push(type);
-              const childrenList = this.d3Graph.getChildrenByType(this.node.id,type);
-              this.d3Graph.createNewCluster(type, childrenList, this.node.id);
-              this.d3Graph.update();
-            };
-            optionsClusterByType.appendChild(option);
-          }
+          const option = document.createElement('li');
+          option.innerText = 'Hide the children with type ' + type;
+          option.onclick = () => {
+            const childrenList = this.d3Graph.getChildrenByType(this.node.id,type);
+            this.d3Graph.createNewCluster(type, childrenList, this.node.id);
+            this.d3Graph.update();
+          };
+          optionsClusterByType.appendChild(option);
         }
       }
     }
