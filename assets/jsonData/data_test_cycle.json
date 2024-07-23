@@ -1,0 +1,103 @@
+[
+    {
+        "nodes": [
+            {
+                "id": "1",
+                "type": "A",
+                "color_id": "#FA8072"
+            },
+            {
+                "id": "2",
+                "type": "B",
+                "color_id": "#BB27CA"
+            },
+            {
+                "id": "3",
+                "type": "C",
+                "color_id": "#F7DC6F"
+            },
+            {
+                "id": "4",
+                "type": "D",
+                "color_id": "#2874A6"
+            },
+            {
+                "id": "5",
+                "type": "A",
+                "color_id": "#FA8072"
+            },
+            {
+                "id": "6",
+                "type": "C",
+                "color_id": "#F7DC6F"
+            },
+            {
+                "id": "7",
+                "type": "D",
+                "color_id": "#2874A6"
+            },
+            {
+                "id": "8",
+                "type": "A",
+                "color_id": "#FA8072"
+            }
+        ],
+        "links": [
+            {
+                "source": "1",
+                "target": "2",
+                "label": "test12"
+            },
+            {
+                "source": "1",
+                "target": "2",
+                "label": "test12"
+            },
+            {
+                "source": "2",
+                "target": "1",
+                "label": "test21"
+            },
+            {
+                "source": "2",
+                "target": "3",
+                "label": "test23"
+            },
+            {
+                "source": "2",
+                "target": "4",
+                "label": "test24"
+            },
+            {
+                "source": "4",
+                "target": "6",
+                "label": "test46"
+            },
+            {
+                "source": "4",
+                "target": "5",
+                "label": "test45"
+            },
+            {
+                "source": "5",
+                "target": "2",
+                "label": "test52"
+            },
+            {
+                "source": "3",
+                "target": "4",
+                "label": "test34"
+            },
+            {
+                "source": "6",
+                "target": "7",
+                "label": "test67"
+            },
+            {
+                "source": "7",
+                "target": "8",
+                "label": "test78"
+            }
+        ]
+    }
+]
