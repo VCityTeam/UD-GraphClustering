@@ -1,7 +1,7 @@
 # UD-GraphClustering
 This demonstration is part of a student research project for visualizing and navigating graphical data on the web. This project will use a web-based data visualization framework to visualize knowledge graphs.
 
-![click-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/e4fb0081-a476-46a1-8e4d-319e1f8526c4)
+![click-clustering](https://github.com/user-attachments/assets/2d7ce220-986a-428f-9221-98a61ac91e4d)
 
 ## Installation
 
