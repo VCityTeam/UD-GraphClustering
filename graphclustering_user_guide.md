@@ -30,3 +30,19 @@ Clicking on a created cluster node removes the node from the graph and makes the
 ![clustering-by-type](https://github.com/user-attachments/assets/267b16fc-e6d2-4549-afc3-29f22437e763)
 
 The class `GraphClusteringByType.js` generates a checkbox for each type of node in the graph. Clicking on a checkbox creates a cluster in which all nodes of that type are grouped together.
+
+## How does it work?
+
+Node and link clustering works by separating nodes and links into two respective lists: 
+- Graph.nodes and Graph.\_nodes for the nodes
+- Graph.links and Graph.\_links for the links
+
+The list named without the '_' contains elements that will be displayed by the graph, while the other list contains elements that will be removed. 
+
+We propose two types of clustering:
+- **neighborhood clustering** which hides the descendants or children of a node. To achieve this, a method in class `D3GraphCanvas.js` generates a 'parent' property for each node, corresponding to a list of the node's parents, and a 'child' property associating the node with a list of its direct children.
+- **clustering by type** which creates a new cluster containing all nodes of that type.
+
+Note that the links of a node hidden in a cluster with non-hidden nodes are kept dotted.
+
+To enable clustering to work properly, new methods have been added to the class `D3GraphCanvas.js`. These methods are located in the “Data functions” section of the code and are documented in the class definition file.
