@@ -5,10 +5,9 @@ This is a user guide for using Graph Clustering functionalities.
 
 ![interface](https://github.com/user-attachments/assets/3f170b63-06a7-4685-a537-f8e881c8d1ec)
 
-The interface includes three optional widgets:
+The interface includes two optional widgets:
 - a list of checkboxes in the top left-hand corner for clustering by type implemented in the `GraphClusteringByType.js`
 - a drop-down menu that appears when you click on a graph node implemented in the `ContextMenuGraphClustering.js`
-- a menu for configuring graph forces implemented in the demo
 
 #### Context Menu for Graph Clustering
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
