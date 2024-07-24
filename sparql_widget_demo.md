@@ -2,6 +2,7 @@
 
 One application of the Graph Clustering Research Project is a part of the SPARQL module [here](packages/widget_sparql/Readme.md). This is a UD-Viz widget for visualizing urban graph data and interacting with objects in the 3D scene.
 
+## Graph view
 #### Graph configuration
 
 ![graph_configuration](https://github.com/user-attachments/assets/cd0e38f0-a7f3-4280-9ac5-2daad8cbc3ab)
