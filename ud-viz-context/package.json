@@ -9,7 +9,7 @@
     "build": "webpack --config webpack.config.js",
     "host": "node ./bin/server.js",
     "debug": "nodemon --watch src/index.js --exec 'npm run build'",
-    "debug2": "nodemon --watch ../UD-Viz/packages/widget_sparql/src --watch ./src -e js --delay 2500ms --exec npm run build"
+    "debug2": "nodemon --watch ../../UD-Viz/packages/widget_sparql/src --watch ./src -e js --delay 2500ms --exec npm run build"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,7 @@
     "@ud-viz/point_cloud_visualizer": "^4.3.0",
     "@ud-viz/widget_bookmark": "^4.3.0",
     "@ud-viz/widget_layer_choice": "^4.3.0",
-    "@ud-viz/widget_sparql": "../UD-Viz/packages/widget_sparql",
+    "@ud-viz/widget_sparql": "../../UD-Viz/packages/widget_sparql",
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3"
   }

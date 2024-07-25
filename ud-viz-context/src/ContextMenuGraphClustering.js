@@ -168,7 +168,7 @@ export class ContextMenuGraphClustering {
           option.innerText = 'Hide the children with type ' + type;
           option.onclick = () => {
             const childrenList = this.d3Graph.getChildrenByType(this.node.id,type);
-            this.d3Graph.createNewCluster(type, childrenList, this.node.id);
+            this.d3Graph.createNewCluster(type, childrenList);
             this.d3Graph.update();
           };
           optionsClusterByType.appendChild(option);

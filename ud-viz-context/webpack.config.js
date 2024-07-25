@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  resolve: { modules: ['../UD-Viz/node_modules', './node_modules'], },
+  resolve: { modules: ['../../UD-Viz/node_modules', './node_modules'], },
   module: {
     rules: [
       {

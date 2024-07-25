@@ -7,6 +7,13 @@ const config = {};
 config.height = "1000";
 config.width = "1500";
 config.fontSize = 4;
+config.fontFamily = "Arial";
+config.strokeWidth = 0.75;
+config.nodeSize = 7;
+config.defaultColor = "#dedede";
+config.linkColor = "#999";
+config.nodeStrokeColor = "black";
+config.fontSizeLegend = 15;
 
 function formatResponseData(response, graph) {
   graph.links = response[0].links;

@@ -95,6 +95,13 @@ loadMultipleJSON([
     let hiddenGroup = undefined;
 
     const handleZoom = (ev, graph) => {
+      const getMaxiGroup = (graph) => {
+        let max = 0;
+        graph.data.nodes.forEach((elem) => {
+          if (elem.group > max) max = elem.group;
+        });
+        return max;
+      }
       d3.selectAll('g.graph')
         .attr('height', '100%')
         .attr('width', '100%')
@@ -117,11 +124,14 @@ loadMultipleJSON([
         ) {
           graph.changeVisibilityChildren('zoom');
           graph.removeNode('zoom');
+          let clusteredNodes = [];
+          const maxGroup = getMaxiGroup(graph);
+          for (let i = Math.floor(ev.transform.k / zoom.value) ; i <= maxGroup ; i++) {
+            clusteredNodes = clusteredNodes.concat(graph.getNodeByGroup(i));
+          }
           const node = graph.createNewCluster(
             'zoom',
-            graph.getNodeByGroup(
-              Math.floor(ev.transform.k / zoom.value)
-            )
+            clusteredNodes
           );
           node.display = false;
           hiddenGroup = Math.floor(
@@ -194,7 +204,7 @@ loadMultipleJSON([
       const node = event.datum;
       console.log('node clicked: ', node);
 
-      if (node.display) {
+      if (node.display && node.realNode) {
         contextMenu.display(event, node);
 
         if (node.type == 'Building') {
@@ -203,6 +213,14 @@ loadMultipleJSON([
 
         if (node.child == undefined && sparqlWidget.explorationQuery != undefined) {
           contextMenu.displayOption('exploration');
+        }
+      }
+      else if (!node.realNode) {
+        sparqlWidget.d3Graph.changeVisibilityChildren(node.id);
+        sparqlWidget.d3Graph.removeNode(node.id);
+        const element = document.getElementById(node.id);
+        if (element) {
+          element.checked = false;
         }
       }
 
