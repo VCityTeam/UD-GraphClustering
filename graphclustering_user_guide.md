@@ -1,63 +1,48 @@
 # Graph Clustering User Guide
-This is a user guide for using the Graph Clustering functionalities as a part of the SPARQL module [here](packages/widget_sparql/Readme.md). This is a UD-Viz widget for visualizing urban graph data and interacting with objects in the 3D scene.
-
-The widget is displayed on the top left corner of the screen.
+This is a user guide for using Graph Clustering functionalities. 
 
 ## Interface
 
-![interface](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/4f37cb88-ae12-44b6-9d34-6a7d852bd38c)
+![interface](https://github.com/user-attachments/assets/3f170b63-06a7-4685-a537-f8e881c8d1ec)
 
-### Show/Hide Query
-This button can toggle whether the text area for the query to be submitted is shown or not. This also allows the query to be edited before submission.
+The interface includes two optional widgets:
+- a list of checkboxes in the top left-hand corner for clustering by type implemented in the `GraphClusteringByType.js`
+- a drop-down menu that appears when you click on a graph node implemented in the `ContextMenuGraphClustering.js`
 
-Queries are written in [SPARQL](https://www.w3.org/TR/sparql11-query/)
-
-### Select Result Visualization Format
-Use this dropdown menu to select how the query result will be visualized. Currently 2 modes are presented that enable different functionalities to interact with the 3D scene:
-
-- JSON
-- Graph
-
-## Graph view
-#### Graph configuration
-
-Use the "Graph configuration" menu to enable or disable zoom clustering. This function hides nodes according to their group when zoomed into the graph, and displays them when zoomed out. The "Zoom sensitivity" parameter allows you to influence the speed at which zoom clustering operates.
-
-*Zoom clustering*
-
-![zoom-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/02cd51a7-e6a7-408e-9f78-1d2c007a6216)
-
-You can also modify the forces exerted on and between nodes, as well as the length of the links connecting them.
-
-The "Building ID" input lets you find and focus the camera on any building in the 3D scene, by knowing its ID.
-
-*Show button*
-
-![show-building](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/b5a9a84b-4f8d-4ae9-9f77-b9df1618f305)
-
-#### Interactions with the Graph
+#### Context Menu for Graph Clustering
 Clicking on any node will display, in a context menu, all the possible actions related to the node.
-
-![chrome-capture-2024-7-9](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/ed13b653-32aa-4801-b82f-d39ac90b5d32)
 
 | Action title                          | Description                                                                                                                             | Apply to                                               |
 | ------------------------------------- |:--------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Hide the descendants                  | Transforms the node into a cluster in which all its descendants are hidden                                                              | Nodes with children                                    |
-| Show the descendants                  | Makes all its children reappear                                                                                                         | Nodes with children                                    |
-| Add its children                      | Updates the SPARQL query to add the children of the clicked node, if it has some                                                        | Nodes without children yet                             |
-| Focus the camera on the building      | Zooms the camera on the building in the 3D scene                                                                                        | Building nodes                                         |
+| Hide the descendants                  | Transforms the node into a cluster in which all its descendants are hidden                                                              | Nodes with children part of an acyclic subgraph        |
+| Hide the children                     | Transforms the node into a cluster in which all its children are hidden                                                                 | Nodes with children part of a cyclic subgraph          |
+| Show the children/descendants         | Makes all its children/descendants reappear                                                                                             | Nodes with children                                    |
 | Hide the children with the type '...' | Creates a new cluster node linked to the clicked node in which all its children with the specified type and their descendant are hidden | Nodes whose children have more than one different type | 
 
-*Hide/Show the descendants*
+*Hide / Show the children*
 
-![click-clustering](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/307b3878-31d3-49ee-b98a-144965b089c2)
+![clustering-children](https://github.com/user-attachments/assets/43b70d7c-db14-4906-b65b-a481626aa61e)
 
 Clicking on a created cluster node removes the node from the graph and makes the children reappear.
 
-The action "Add its children" is not available with all query but only the original one, that is called the "exploration query".
+#### Clustering by type
 
-#### Interactions with the 3D scene
-Clicking on a building of the 3D scene will add the corresponding node and its children to the graph. This functionality is made possible by the URIs of nodes in the graph that corresponds with identifiers of objects in the tileset's batch table.
+![clustering-by-type](https://github.com/user-attachments/assets/267b16fc-e6d2-4549-afc3-29f22437e763)
 
-![click-building](https://github.com/VCityTeam/UD-GraphClustering/assets/129035607/a6069e8d-5369-49dc-bcf9-84f900784346)
+The class `GraphClusteringByType.js` generates a checkbox for each type of node in the graph. Clicking on a checkbox creates a cluster in which all nodes of that type are grouped together.
 
+## How does it work?
+
+Node and link clustering works by separating nodes and links into two respective lists: 
+- Graph.nodes and Graph.\_nodes for the nodes
+- Graph.links and Graph.\_links for the links
+
+The list named without the '_' contains elements that will be displayed by the graph, while the other list contains elements that will be removed. 
+
+We propose two types of clustering:
+- **neighborhood clustering** which hides the descendants or children of a node. To achieve this, a method in class `D3GraphCanvas.js` generates a 'parent' property for each node, corresponding to a list of the node's parents, and a 'child' property associating the node with a list of its direct children.
+- **clustering by type** which creates a new cluster containing all nodes of that type.
+
+Note that the links of a node hidden in a cluster with non-hidden nodes are kept dotted.
+
+To enable clustering to work properly, new methods have been added to the class `D3GraphCanvas.js`. These methods are located in the “Data functions” section of the code and are documented in the class definition file.
