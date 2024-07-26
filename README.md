@@ -35,10 +35,10 @@ To upload files into the RDF-store to be used by the sparqlModule, you can use t
 
 Make sure that you've uploaded the corresponding 3DTiles layer in the `3DTiles_temporal.json` file [here](./assets/config/layer/3DTiles_temporal.json) in order to visualize the 3D scene.
 
-### Build Images and run containers
+### Build Images, Demos and run containers
 First, make sure to set the `sparqlModule/url` port in the `sparql_widget.json` file [here](./assets/config/widget/sparql_widget.json) to the same value as the `BLAZEGRAPH_PORT` variable declared in the [.env](./.env) file.
 
-Then build the Blazegraph docker image, build both demo and run their containers:
+Then build the Blazegraph docker image, build both demos and run their containers:
 ```
 docker compose up
 ```
