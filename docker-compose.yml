@@ -6,11 +6,6 @@ services:
     image: vcity/blazegraph-cors
     ports:
       - "${BLAZEGRAPH_PORT}:8080"
-
-  blazegraph-tt:
-    image: vcity/blazegraph-cors
-    ports:
-      - "${BLAZEGRAPHTT_PORT}:8080"
   udviz1:
     build:
       context: ./ud-viz-context
