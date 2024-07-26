@@ -4,14 +4,12 @@ These demonstrations are part of a student research project for visualizing and 
 ![click-clustering](https://github.com/user-attachments/assets/2d7ce220-986a-428f-9221-98a61ac91e4d)
 
 ## Installation
-
 The following sections detail how to setup the demo. In case of crash or error where the demo containers are down, it is possible that the data may need to be [reuploaded](#upload-rdf-store-dataset) to the blazegraph container.
 
 ### Pre-requisites 
-
 * [Install Docker](https://docs.docker.com/engine/install/)
 
-### Repository setup
+### Repository Setup
 Currently, the UD-Viz framework must be initialized after cloning this repository.
 ```
 git clone https://github.com/VCityTeam/UD-GraphClustering.git
@@ -30,12 +28,7 @@ To configure the demo and the components that support it, edit the `.env` file t
 - 9012 : `UD-Viz - demo sparql widget`
 - 9013 : `UD-Viz - demo json data`
 
-### Upload RDF-Store Dataset
-To upload files into the RDF-store to be used by the sparqlModule, you can use the online Blazegraph interface [here](http://localhost:9011/blazegraph/#update).
-
-Make sure that you've uploaded the corresponding 3DTiles layer in the `3DTiles_temporal.json` file [here](./assets/config/layer/3DTiles_temporal.json) in order to visualize the 3D scene.
-
-### Build images, demos and run containers
+### Build Images, Demos and Run Containers
 First, make sure to set the `sparqlModule/url` port in the `sparql_widget.json` file [here](./assets/config/widget/sparql_widget.json) to the same value as the `BLAZEGRAPH_PORT` variable declared in the [.env](./.env) file.
 
 Then build the Blazegraph docker image, build both demos and run their containers:
