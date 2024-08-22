@@ -1,0 +1,56 @@
+[
+    {
+        "nodes": [
+            {
+                "id": "Tour Nord",
+                "type": "Tour",
+                "color_id": "#FF0000",
+                "fx": 638,
+                "fy": 238
+            },
+            {
+                "id": "Tour Sud",
+                "type": "Tour",
+                "color_id": "#FF0000",
+                "fx": 580,
+                "fy": 362
+            },
+            {
+                "id": "Notre-Dame de Paris",
+                "type": "Monument",
+                "color_id": "#0000FF",
+                "fx": 886,
+                "fy": 446
+            },
+            {
+                "id": "1163",
+                "type": "Date",
+                "color_id": "#00FF00"
+            },
+            {
+                "id": "Monument au Pape",
+                "type": "Monument",
+                "color_id": "#0000FF",
+                "fx": 756,
+                "fy": 732
+            }
+        ],
+        "links": [
+            {
+                "source": "Notre-Dame de Paris",
+                "target": "Tour Sud",
+                "label": "includes"
+            },
+            {
+                "source": "Notre-Dame de Paris",
+                "target": "Tour Nord",
+                "label": "includes"
+            },
+            {
+                "source": "Notre-Dame de Paris",
+                "target": "1163",
+                "label": "construction start"
+            }
+        ]
+    }
+]
