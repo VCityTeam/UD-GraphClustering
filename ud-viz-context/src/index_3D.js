@@ -97,7 +97,7 @@ loadMultipleJSON([
           if (elem.group > max) max = elem.group;
         });
         return max;
-      }
+      };
       d3.selectAll('g.graph')
         .attr('height', '100%')
         .attr('width', '100%')
@@ -192,7 +192,7 @@ loadMultipleJSON([
     };
     contextMenu.initNewOption('exploration',optionExploration);
 
-    // add listeners for D3Canvas node events. Three events are currently recognized 'click', 'mouseover', and 'mouseout'
+    // Add listeners for D3Canvas node events. Three events are currently recognized 'click', 'mouseover', and 'mouseout'
     sparqlWidget.d3Graph.addEventListener('click', (event) => {
 
       event.event.stopPropagation();

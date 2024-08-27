@@ -191,5 +191,4 @@ export class ContextMenuGraphClustering {
       optionsClusterByType.removeChild(optionsClusterByType.firstChild);
     }
   }
-
 }
