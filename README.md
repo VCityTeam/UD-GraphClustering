@@ -31,8 +31,16 @@ Then build the Blazegraph docker image, build the demos and run their containers
 docker compose build
 docker compose up
 ```
-### Upload RDF-Store Dataset
-To upload files into the RDF-store to be used by the sparqlModule, you can use the online Blazegraph interface [here](http://localhost:9011/blazegraph/#update).
+
+### Load graph data into blazegraph
+
+To load the knowledge graph data into Blazegraph (required for full demo functionality) run the following command:
+
+```bash
+curl -X POST --data-binary 'uri=https://dataset-dl.liris.cnrs.fr/rdf-owl-urban-data-ontologies/Datasets/Villeurbanne/2018/GratteCiel_2018_split.rdf' "http://127.0.0.1:9011/blazegraph/sparql"
+```
+
+To upload additional files into the RDF-store to be used by the sparqlModule, you can use the online Blazegraph interface [here](http://localhost:9011/blazegraph/#update).
 
 Make sure that you've uploaded the corresponding 3DTiles layer in the `3DTiles_temporal.json` file [here](./assets/config/layer/3DTiles_temporal.json) in order to visualize the 3D scene.
 
