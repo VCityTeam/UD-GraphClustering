@@ -3,6 +3,13 @@ These demonstrations are part of a student research project for visualizing and 
 
 ![click-clustering](https://github.com/user-attachments/assets/2d7ce220-986a-428f-9221-98a61ac91e4d)
 
+## Online Access
+
+You can access the online versions of the demonstrations here:
+- [3D Gratte Ciel Demo](http://vcity.liris.city/ud-graphclustering/demo3D)
+- [Aioli Thesaurus Demo](http://vcity.liris.city/ud-graphclustering/demoAioli)
+- [Spatial Graph Demo](http://vcity.liris.city/ud-graphclustering/demoSpatialGraph)
+
 ## Installation
 The following sections detail how to setup the demo. In case of crash or error where the demo containers are down, it is possible that the data may need to be [reuploaded](#upload-rdf-store-dataset) to the blazegraph container.
 
@@ -19,9 +26,9 @@ cd UD-GraphClustering
 ### Component Setup
 To configure the demo and the components that support it, edit the `.env` file to be launched with docker-compose. By default, the following port are used by the following services:
 - 9011: `Blazegraph`
-- 9012 : `UD-Viz - demo sparql widget`
-- 9013 : `UD-Viz - demo json data`
-- 9014 : `UD-Viz - demo static nodes`
+- 9012 : `3D Gratte Ciel Demo`
+- 9013 : `Aioli Thesaurus Demo`
+- 9014 : `Spatial Graph Demo`
 
 ### Build Images, Demos and Run Containers
 First, make sure to set the `sparqlModule/url` port in the `sparql_widget.json` file [here](./assets/config/widget/sparql_widget.json) to the same value as the `BLAZEGRAPH_PORT` variable declared in the [.env](./.env) file.
@@ -44,4 +51,4 @@ To upload additional files into the RDF-store to be used by the sparqlModule, yo
 
 Make sure that you've uploaded the corresponding 3DTiles layer in the `3DTiles_temporal.json` file [here](./assets/config/layer/3DTiles_temporal.json) in order to visualize the 3D scene.
 
-Now the demo `UD-Viz - demo sparql widget`,  `UD-Viz - demo json data` and `UD-Viz - demo static nodes` are ready and can be accessed from [localhost:9012](http://localhost:9012), [localhost:9013](http://localhost:9013) and [localhost:9014](http://localhost:9014).
+Now the demo `3D Gratte Ciel Demo`, `Aioli Thesaurus Demo` and `Spatial Graph Demo` are ready and can be accessed from [localhost:9012](http://localhost:9012), [localhost:9013](http://localhost:9013) and [localhost:9014](http://localhost:9014).
