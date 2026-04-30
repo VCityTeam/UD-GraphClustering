@@ -18,10 +18,6 @@ RUN git --version
 ######### Install UD-Viz-Template, a basic web application for UD-Viz projects
 WORKDIR /
 RUN echo "refresh"
-RUN git clone https://github.com/VCityTeam/UD-Viz.git
-WORKDIR /UD-Viz
-RUN git checkout graph-clustering
-RUN npm install
 RUN mkdir UD-GraphClustering
 WORKDIR /UD-GraphClustering
 COPY package.json package.json
